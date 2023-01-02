@@ -13,5 +13,6 @@ MonoBehaviour:
   m_Name: PlayerData
   m_EditorClassIdentifier: 
   playerName: Bob
-  speed: 8.31
-  skin: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
+  speed: 20
+  rotationSpeed: 300
+  skin: {fileID: -9095717837082945937, guid: 34587324d412940a79d530020c957dc0, type: 3}

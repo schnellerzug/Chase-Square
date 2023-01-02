@@ -6,6 +6,7 @@ public class PlayerData : ScriptableObject
 {
     public string playerName;
     public float speed;
+    public float rotationSpeed;
     public Sprite skin;
 
 }

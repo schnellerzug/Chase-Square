@@ -2,5 +2,8 @@
 
 public interface ITranslateVectorInput
 {
-    Vector3 InputTranslate(Vector3 input);
+    void TranslateInput(Vector3 input, float speed);
+
+
+    
 }

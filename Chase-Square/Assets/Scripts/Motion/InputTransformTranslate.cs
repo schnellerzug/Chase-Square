@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class InputTransformTranslate : MonoBehaviour, ITranslateVectorInput
 {
-    public Vector3 InputTranslate(Vector3 input)
+    public void TranslateInput(Vector3 input, float speed)
     {
-        return input;
+        transform.Translate(input * speed * Time.deltaTime);
     }
 }
