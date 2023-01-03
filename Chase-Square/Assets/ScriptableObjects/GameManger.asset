@@ -9,10 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1bada008b2e49c44d9eda69d3cfbb4db, type: 3}
-  m_Name: PlayerData
+  m_Script: {fileID: 11500000, guid: 24d8bc43d8ccd3f489129f3171a9bee8, type: 3}
+  m_Name: GameManger
   m_EditorClassIdentifier: 
-  playerName: Bob
-  speed: 20
-  rotationSpeed: 300
-  skin: {fileID: -9095717837082945937, guid: 34587324d412940a79d530020c957dc0, type: 3}
+  isRunning: 0
+  highscore: 0
+  speed: 1

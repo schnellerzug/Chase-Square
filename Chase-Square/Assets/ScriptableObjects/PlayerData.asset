@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1bada008b2e49c44d9eda69d3cfbb4db, type: 3}
+  m_Name: PlayerData
+  m_EditorClassIdentifier: 
+  playerName: Bob
+  speed: 20
+  rotationSpeed: 300
+  playerModel: {fileID: 3357133262858511023, guid: 4c3d2c66dbe5a394d9fb52879361904b, type: 3}
