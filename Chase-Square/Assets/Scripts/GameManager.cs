@@ -1,12 +1,40 @@
-using System.Collections;
+
 using System;
 using UnityEngine;
+
 
 [CreateAssetMenu(fileName = "GameManger", menuName = "ScriptableObjects/Manager/GameManager", order = 1)]
 
 public class GameManager : ScriptableObject
 {
-    public static GameManager instance;
+    private static GameManager _instance;
+    public static GameManager instance
+    {
+        get
+        {
+
+            if (_instance == null)
+            {
+                GameManager[] results = Resources.FindObjectsOfTypeAll<GameManager>();
+                if (results.Length == 0)
+                {
+                    Debug.LogError("SingletonScriptableObject: Results length is 0 of " + typeof(GameManager).ToString());
+                    return null;
+                }
+                if (results.Length > 1)
+                {
+                    Debug.LogError("SingletonScriptableObject: Results length is greater than 1 of " + typeof(GameManager).ToString());
+                    return null;
+                }
+                _instance = results[0];
+                _instance.hideFlags = HideFlags.DontUnloadUnusedAsset;
+            }
+            return _instance;
+        
+        }
+        set { _instance = value; }
+
+    }
 
     public event Action OnSpawn;
     public event Action OnGameOver;
@@ -19,11 +47,7 @@ public class GameManager : ScriptableObject
 
     public float speed = 1;
 
-    private void OnEnable()
-    {
 
-        instance = this;
-    }
     public void Spawn()
     {
         OnSpawn?.Invoke();
@@ -38,6 +62,7 @@ public class GameManager : ScriptableObject
 
     public void ScoreChange(float score)
     {
+
         OnScoreChange?.Invoke(score);
     }
 

@@ -3,6 +3,7 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     [SerializeField]private PlayerData data;
+    [SerializeField]private Vector2 spawnpoint;
 
     private IGetVectorInput _input;
     private ITranslateVectorInput _motion;
@@ -65,6 +66,7 @@ public class Player : MonoBehaviour
         { 
             playerModel = Instantiate(data.playerModel,this.transform);
         }
+        playerModel.transform.position = spawnpoint;
         playerModel.SetActive(true);
     }
 

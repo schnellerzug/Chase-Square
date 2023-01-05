@@ -1,14 +1,16 @@
 
+using System.Collections;
 using UnityEngine;
 
 public class GameRunner : MonoBehaviour
 {
-
+    private IChangeFloat increaseFloat;
     private float score;
    
 
     private void OnEnable()
     {
+        increaseFloat = GetComponent<IChangeFloat>();
         GameManager.instance.OnGameOver += GameOver;
     }
 
@@ -20,21 +22,23 @@ public class GameRunner : MonoBehaviour
     private void Start() 
     {
         GameManager.instance.Spawn();
+        StartCoroutine(Score());
         GameManager.instance.PhaseChange(0);
     }
 
-    private void Update()
+    private IEnumerator Score()
     {
-        if (!GameManager.instance.isRunning)
-            return;
-
-        score += 1 * Time.deltaTime;
-        GameManager.instance.ScoreChange(score);
+        while (true)
+        {
+            score = increaseFloat.ChangeFloat(score);
+            GameManager.instance.ScoreChange(score);
+            yield return null;
+        }
     }
 
     private void GameOver()
     {
-        print("I know that the Game is Over");
+        StopAllCoroutines();
     }
 
 

@@ -19,6 +19,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 30e32065312e3ad408b0a57b3a5c7110, type: 3}
   - {fileID: 21300000, guid: dac4f90bb542b164e97de7479b25336f, type: 3}
   - {fileID: 21300000, guid: b393b94657871fc43ae999f4bd0f812d, type: 3}
+  maxSpriteHeight: 4.8
   duration: 3
   startAmount: 0
   minMaxSpeed: {x: 1, y: 4}
