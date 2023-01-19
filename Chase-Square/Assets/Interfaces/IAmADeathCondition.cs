@@ -1,4 +1,6 @@
-﻿internal interface IAmADeathCondition
+﻿using System;
+
+public interface IAmADeathCondition
 {
-   public bool Condition();
+   public event Action OnCondition;
 }

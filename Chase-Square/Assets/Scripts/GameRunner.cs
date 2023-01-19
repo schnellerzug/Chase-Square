@@ -12,17 +12,18 @@ public class GameRunner : MonoBehaviour
     {
         increaseFloat = GetComponent<IChangeFloat>();
         GameManager.instance.OnGameOver += GameOver;
+        GameManager.instance.OnSpawn += Spawn;
     }
 
     private void OnDisable()
     {
         GameManager.instance.OnGameOver -= GameOver;
+        GameManager.instance.OnSpawn -= Spawn;
     }
 
     private void Start() 
     {
         GameManager.instance.Spawn();
-        StartCoroutine(Score());
         GameManager.instance.PhaseChange(0);
     }
 
@@ -39,7 +40,16 @@ public class GameRunner : MonoBehaviour
     private void GameOver()
     {
         StopAllCoroutines();
+        ResetValues();
+    }
+    private void Spawn()
+    {
+        StartCoroutine(Score());
     }
 
+    private void ResetValues()
+    {
+        score = 0;
+    }
 
 }

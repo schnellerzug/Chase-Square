@@ -7,7 +7,7 @@ public class SetValuesForObstacle : MonoBehaviour, ISetObjectValues<Obstacle>
     private ObstacleSpawner obstacleSpawner;
     private Camera mainCamera;
     
-    private void Start()
+    private void OnEnable()
     {
         obstacleSpawner = GetComponent<ObstacleSpawner>();
         mainCamera = obstacleSpawner.mainCamera;
@@ -34,7 +34,7 @@ public class SetValuesForObstacle : MonoBehaviour, ISetObjectValues<Obstacle>
         var size = actuelData.minMaxSize.x + (actuelData.minMaxSize.y - actuelData.minMaxSize.x) * Random.value;
         size *= actuelData.maxSpriteHeight / cluttersprite.bounds.size.y;
         clutter.transform.localScale = new Vector3(size, size, 0);
-
+        //print(clutter.transform.position);
         //Speed
         var speed = actuelData.minMaxSpeed.x + (actuelData.minMaxSpeed.y - actuelData.minMaxSpeed.x) * Random.value;
         clutter.GetComponent<Obstacle>().speed = speed;

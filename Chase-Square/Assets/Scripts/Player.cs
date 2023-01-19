@@ -1,9 +1,12 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Player : MonoBehaviour
 {
     [SerializeField]private PlayerData data;
     [SerializeField]private Vector2 spawnpoint;
+    private bool isAlive;
 
     private IGetVectorInput _input;
     private ITranslateVectorInput _motion;
@@ -14,11 +17,13 @@ public class Player : MonoBehaviour
     private void OnEnable()
     {
         GameManager.instance.OnSpawn += Spawn;
+        GameManager.instance.OnGameOver += GameOver;
     }
 
     private void OnDisable()
     {
         GameManager.instance.OnSpawn -= Spawn;
+        GameManager.instance.OnGameOver -= GameOver;
     }
 
     private void Awake()
@@ -30,8 +35,12 @@ public class Player : MonoBehaviour
     }
     private void Update()
     {
+        if (!isAlive)
+        {
+            return;
+        }
         Movement();
-        DeathConditions();
+        
     }
 
     private Vector3 input;
@@ -47,27 +56,37 @@ public class Player : MonoBehaviour
         if(_motion != null)  _motion.TranslateInput(input,data.speed);
     }
 
-    private void DeathConditions()
+    private void Death()
     {
-        foreach (var condition in _conditions)
+        if(isAlive)
         {
-            if (condition.Condition())
-            {
-                GameManager.instance.GameOver();
-                playerModel.SetActive(false);
-                return;
-            }
+            GameManager.instance.GameOver();   
         }
+              
     }
 
+    private void GameOver()
+    {
+        isAlive = false;
+        playerModel.SetActive(false);
+        foreach (var condition in _conditions)
+        {
+            condition.OnCondition -= Death;
+        }
+    }
     private void Spawn()
     {
         if(playerModel == null) 
         { 
             playerModel = Instantiate(data.playerModel,this.transform);
         }
-        playerModel.transform.position = spawnpoint;
+        transform.position = spawnpoint;
         playerModel.SetActive(true);
+        isAlive = true;
+        foreach (var condition in _conditions)
+        {
+            condition.OnCondition += Death;
+        }
     }
 
  
