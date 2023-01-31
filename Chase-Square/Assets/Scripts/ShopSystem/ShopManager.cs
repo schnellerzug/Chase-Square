@@ -9,19 +9,18 @@ public abstract class ShopManager<T> : MonoBehaviour where T : Item
     [SerializeField] private IntEventChannelSO _changeInt;
     [SerializeField] private TypeEventChannelSO<T> _changeDesign;
     [SerializeField] private TypeEventChannelSO<Sprite[]> _createDesign;
-    [SerializeField] private VoidEventChannelSO _buyEvent;
+    [SerializeField] private IntEventChannelSO _buyEvent;
     [SerializeField] private BuyFeedbackChannelSO _buyFeedback;
 
     [SerializeField] private ShopData<T> shopData;
 
-    private int actuelItem;
 
     private IAmABuyCondition<T> _buyCondition;
 
     private void OnEnable()
     {
         _changeInt.OnIntEventRequested += ChangeActuelItem;
-        _buyEvent.OnVoidEventRequested += Buy;
+        _buyEvent.OnIntEventRequested += Buy;
 
         _buyCondition = GetComponent<IAmABuyCondition<T>>();
         
@@ -34,23 +33,23 @@ public abstract class ShopManager<T> : MonoBehaviour where T : Item
     private void OnDisable()
     {
         _changeInt.OnIntEventRequested -= ChangeActuelItem;
-        _buyEvent.OnVoidEventRequested -= Buy;
+        _buyEvent.OnIntEventRequested -= Buy;
     }
 
 
-    private void Buy()
+    private void Buy(int actuelItem)
     {
         if (_buyCondition.CheckCondition(shopData.shopItems[actuelItem]))
         {
             _buyFeedback.RaiseEvent(true, _buyCondition.ReasonText);
             shopData.shopItems[actuelItem].Buy();
             _changeDesign.RaiseEvent(shopData.shopItems[actuelItem]);
+            return;
 
         }
-        else
-        {
+
             _buyFeedback.RaiseEvent(false, _buyCondition.ReasonText);
-        }
+        
     }
 
     void SetAll()
@@ -66,12 +65,12 @@ public abstract class ShopManager<T> : MonoBehaviour where T : Item
 
     private void ChangeActuelItem(int amount)
     {
-        actuelItem += amount;
-        if(actuelItem >= shopData.shopItems.Length)
-            actuelItem = 0;
-        else if(actuelItem < 0)
-            actuelItem = shopData.shopItems.Length-1;
+        //actuelItem += amount;
+        //if(actuelItem >= shopData.shopItems.Length)
+        //    actuelItem = 0;
+        //else if(actuelItem < 0)
+        //    actuelItem = shopData.shopItems.Length-1;
 
-        _changeDesign.RaiseEvent(shopData.shopItems[actuelItem]);
+        //_changeDesign.RaiseEvent(shopData.shopItems[actuelItem]);
     }
 }

@@ -10,7 +10,7 @@ public abstract class TypeEventChannelSO<T> : ScriptableObject
     {
         if (OnItemEventRequested != null)
         {
-            OnItemEventRequested.Invoke(item);
+            OnItemEventRequested?.Invoke(item);
         }
         else
         {

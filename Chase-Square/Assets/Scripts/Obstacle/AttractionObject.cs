@@ -2,30 +2,35 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AttractionObject : MonoBehaviour
+
+public class AttractionObject : Obstacle
 {
-    //[SerializeField] private float pullRadius = 10f;
-    //[SerializeField] private float pullForce = 1;
+    [SerializeField] private float pullRadius = 10f;
+    [SerializeField] private float pullForce = 1;
+    [SerializeField] private int maxAmount = 10;
 
+    IGetAvailableObject<Collider2D> _availableObjects;
+    IApplyRigidbodyForce _applyForce;
 
-    //[SerializeField] private float[] phaseForce;
+    private void Awake()
+    {
+       _availableObjects = GetComponent<IGetAvailableObject<Collider2D>>();
+        _applyForce= GetComponent<IApplyRigidbodyForce>();
+    }
 
-    //public void OnEnable()
-    //{
+    protected override void Update()
+    {
+        base.Update();
+        var objects = _availableObjects.GetObjects(maxAmount);
+        
+        for (int i = 0; i < objects.Length; i++)
+        {
+            if (objects[i] == null)
+                return;
 
-    //    pullForce = phaseForce[GameManager.instance.phase];
-    //}
-    //public void FixedUpdate()
-    //{
-    //    var dis = transform.position - GameManager.instance.player.transform.position;
-
-    //    GameManager.instance.player.GetComponent<Rigidbody2D>().AddForce(pullForce * dis);
-    //}
-    //public void OnDrawGizmosSelected()
-    //{
-
-    //    Gizmos.matrix = Matrix4x4.identity;
-    //    Gizmos.color = Color.blue;
-    //    Gizmos.DrawSphere(transform.position, pullRadius);
-    //}
+            if (objects[i].attachedRigidbody != null)
+                _applyForce.ApplyRigidbodyForce(objects[i].attachedRigidbody);
+        }
+        
+    }
 }

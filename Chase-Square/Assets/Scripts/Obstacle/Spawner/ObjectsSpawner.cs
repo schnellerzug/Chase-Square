@@ -1,6 +1,7 @@
 
 using System.Collections;
 using System.Linq;
+using System.Threading;
 using UnityEngine;
 
 
@@ -12,38 +13,37 @@ public class ObjectsSpawner<T> : MonoBehaviour where T : MonoBehaviour
     public Camera mainCamera;
 
     private T[] childs;
-    private IGetAvailableObject<T> _getAvailable;
+    private IGetAvailableObjectFromList<T> _getAvailable;
     private IChooseObjectOfList<Prefab> _randomPrefab;
     private ISetObjectValues<T> _setObjectValues;
+    private IAmTimer _timer;
 
-    private void OnEnable()
+    protected virtual void OnEnable()
     {
         _setObjectValues = GetComponent<ISetObjectValues<T>>();
-        _getAvailable = GetComponent<IGetAvailableObject<T>>();
+        _getAvailable = GetComponent<IGetAvailableObjectFromList<T>>();
         _randomPrefab = GetComponent<IChooseObjectOfList<Prefab>>();
-        GameManager.instance.OnSpawn += Starting;
-        GameManager.instance.OnGameOver += StopAndDestroy;
-        GameManager.instance.OnPhaseChange += ChangeData;
+        _timer = GetComponent<IAmTimer>();
+        
     }
 
-    private void OnDisable()
-    {
-        GameManager.instance.OnSpawn -= Starting;
-        GameManager.instance.OnGameOver -= StopAndDestroy;
-        GameManager.instance.OnPhaseChange -= ChangeData;
-    }
-    private void Starting()
+    protected virtual void OnDisable()
     {
 
+    }
+    protected void Starting()
+    {
+        _timer.OnTimerEnd -= Spawn;
+        _timer.OnTimerEnd += Spawn;
         childs = transform.GetComponentsInChildren<T>(true);
         for (int i = 0; i < actuelData.startAmount; i++)
         {
             SpawnClutter(false);
-        }        
-        StartCoroutine(Spawning());
+        }
+        _timer.StartTimer(actuelData.duration);
     }
 
-    private void ChangeData(int phase)
+    protected void ChangeData(int phase)
     {
         if(phase >= datas.Length)
             phase = datas.Length - 1;
@@ -52,22 +52,37 @@ public class ObjectsSpawner<T> : MonoBehaviour where T : MonoBehaviour
         actuelData.maxSpriteHeight = actuelData.sprites.Max(x => x.bounds.size.y);
     }
 
-    private void StopAndDestroy()
+    protected void StopAndDestroy(int destroyAmount, float stopTime)
     {
-        StopAllCoroutines();
+        if( destroyAmount < 0 ) 
+        {
+            destroyAmount= 0;
+        }
+        else if( destroyAmount > childs.Length)
+        {
+            destroyAmount = childs.Length;
+        }
+        for (int i = 0; i < destroyAmount ; i++)
+        {
+            childs[i].gameObject.SetActive(false);
+            print(childs[i].gameObject);
+        }
+        _timer.StartTimer(stopTime);
+    }
+    protected void StopAndDestroy()
+    {
+        _timer.StopTimer();
         foreach (var obstacle in childs)
         {
             obstacle.gameObject.SetActive(false);
         }
     }
 
-    private IEnumerator Spawning()
+    protected void Spawn()
     {
-        while (true)
-        {
-            SpawnClutter(true);
-            yield return new WaitForSeconds(actuelData.duration);
-        }
+
+        SpawnClutter(true);
+        _timer.StartTimer(actuelData.duration);
     }
 
     protected virtual void SpawnClutter(bool outsidecamera)

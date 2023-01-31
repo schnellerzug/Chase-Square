@@ -16,6 +16,10 @@ MonoBehaviour:
   - prefab: {fileID: 2940278616284440403, guid: ad5f914267ccbbf44b262b28bb86de95, type: 3}
     probability: 0
   - prefab: {fileID: 6632463958257032436, guid: cf5b47bea3aec134a90e9f2d13c5ddf2, type: 3}
+    probability: 0
+  - prefab: {fileID: 916203850572242237, guid: c5719deeaf6a3774ab76c9bb0ccbec5d, type: 3}
+    probability: 0
+  - prefab: {fileID: 1992468333120368256, guid: a079e3cb29ca06649a1c32c636472659, type: 3}
     probability: 1
   sprites:
   - {fileID: 21300000, guid: 30e32065312e3ad408b0a57b3a5c7110, type: 3}

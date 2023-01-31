@@ -1,69 +1,76 @@
 
 using UnityEngine;
-using UnityEngine.UI;
 
 public abstract class ShopGUI<T> : MonoBehaviour where T : Item
 {
+    [SerializeField] private ShopData<T> data;
+
     [Header("EventChannels")]
-    [SerializeField] private VoidEventChannelSO _buyEventChannel;
-    [SerializeField] private TypeEventChannelSO<T> _actuelChangeEventChannel;
+    [SerializeField] private IntEventChannelSO _buyEventChannel;
+    //[SerializeField] private TypeEventChannelSO<T[]> _actuelChangeEventChannel;
     [SerializeField] private TypeEventChannelSO<Sprite[]> _createDesignsEvent;
     [SerializeField] private IntEventChannelSO _changeActuelItem;
     [SerializeField] private BuyFeedbackChannelSO _buyFeedback;
 
-    [Header("GUI")]
-    [SerializeField] private Button buyButton;
+    private int actuelItem;
 
     private IMoveDesign _moveDesign;
     private IChangeShopGUI<T> _changeDesign;
-    private ICreateDesign _createDesign;
+    private IShowText _showText;
 
     private void OnEnable()
     {
-        buyButton.onClick.AddListener(Buy);
-        _actuelChangeEventChannel.OnItemEventRequested += ChangeDesign;
+        //buyButton.onClick.AddListener(Buy);
+        //_actuelChangeEventChannel.OnItemEventRequested += ChangeDesign;
         _buyFeedback.OnBuyFeedback += FeedBack;
         _createDesignsEvent.OnItemEventRequested += CreateDesignForItem;
 
         _moveDesign = GetComponent<IMoveDesign>();
         _changeDesign = GetComponent<IChangeShopGUI<T>>();
-        _createDesign = GetComponent<ICreateDesign>();
+        _showText = GetComponent<IShowText>();
         
 
     }
     private void OnDisable()
     {
-        buyButton.onClick.RemoveListener(Buy);
-        _actuelChangeEventChannel.OnItemEventRequested -= ChangeDesign;
+        //buyButton.onClick.RemoveListener(Buy);
+        //_actuelChangeEventChannel.OnItemEventRequested -= ChangeDesign;
         _buyFeedback.OnBuyFeedback -= FeedBack;
         _createDesignsEvent.OnItemEventRequested -= CreateDesignForItem;
     }
-    private void Buy()
+    public void Buy(int value)
     {
-        _buyEventChannel?.RaiseEvent();
+        _buyEventChannel?.RaiseEvent(value);
     }
 
-    void ChangeDesign(T item)
+    void ChangeDesign()
     {
-        _changeDesign?.ChangeDesign(item);
+        _changeDesign?.ChangeDesign(data.shopItems, actuelItem);
     }
 
     public void Move(int amount)
     {
-        _changeActuelItem?.RaiseEvent(amount);
+        actuelItem += amount;
+        if (actuelItem >= data.shopItems.Length)
+            actuelItem = 0;
+        else if (actuelItem < 0)
+            actuelItem = data.shopItems.Length - 1;
+
+        //_changeActuelItem?.RaiseEvent(amount);
+        ChangeDesign();
         _moveDesign?.Move(amount, 0);
     }
 
+
     private void FeedBack(bool value,string reason )
     {
-        
+        _showText.Show(reason,value? Color.green : Color.red);
         print(value + reason);
     }
 
     void CreateDesignForItem(Sprite[] sprites)
     {
         print(sprites.Length);
-        var objects = _createDesign?.CreateDesign(sprites);
         _moveDesign?.StartPosition(sprites);
         Move(0);
     }  
