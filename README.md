@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/images/homescreen.png" width="280" />
+  <img src="assets/homescreen.jpg" width="280" />
 </p>
 
 # Chase Planets
@@ -9,8 +9,8 @@ Ein mobiles Arcade-Game, bei dem du eine Rakete durch den Weltraum steuerst und 
 Schnelles Gameplay, klares Ziel: **so lange wie möglich überleben**.
 
 <p align="center">
-  <img src="assets/images/gameplay-1.png" width="280" />
-  <img src="assets/images/gameplay-2.png" width="280" />
+  <img src="assets/gameplay.jpg" width="280" />
+  <img src="assets/gameplay_2.jpg" width="280" />
 </p>
 
 ---
@@ -37,8 +37,8 @@ Das Spiel ist in **Phasen** unterteilt, die mit der Zeit schwieriger werden.
 
 ---
 <p align="center">
-  <img src="assets/images/gameover.png" width="280" />
-  <img src="assets/images/shop.png" width="280" />
+  <img src="assets/gameover.jpg" width="280" />
+  <img src="assets/shop.jpg" width="280" />
 </p>
 
 ## Technik
